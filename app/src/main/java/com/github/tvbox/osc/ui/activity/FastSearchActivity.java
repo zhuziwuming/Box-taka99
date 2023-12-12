@@ -331,7 +331,8 @@ public class FastSearchActivity extends BaseActivity {
         if (mSearchTitle != null) {
 //            mSearchTitle.setText(String.format(getString(R.string.fs_results) + " : %d/%d", finishedCount, spNames.size()));
             finishedCount = searchAdapter.getData().size();
-            mSearchTitle.setText(String.format(getString(R.string.fs_results) + " : %d", finishedCount));
+            //mSearchTitle.setText(String.format(getString(R.string.fs_results) + " : %d", finishedCount));
+			mSearchTitle.setText(String.format(getString(R.string.fs_results) + "：%d/%d", resultVods.size(), spNames.size()));
         }
         if (event.type == RefreshEvent.TYPE_SEARCH_RESULT) {
             try {
