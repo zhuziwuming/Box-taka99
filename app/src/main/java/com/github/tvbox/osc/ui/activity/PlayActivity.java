@@ -97,6 +97,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.AbsCallback;
+import com.lzy.okgo.callback.StringCallback;//用于去广告返回字符串
 import com.lzy.okgo.model.HttpHeaders;
 import com.lzy.okgo.model.Response;
 import com.obsez.android.lib.filechooser.ChooserDialog;
@@ -810,6 +811,41 @@ public class PlayActivity extends BaseActivity {
                     }
                 });
     }
+	
+	private void adblock(String adblockUrl,String url){//增加接口去广告
+		OkGo. < String > get(adblockUrl + url)
+            .tag("adblock")
+            .execute(new StringCallback() {
+                public void onSuccess(Response < String > response) {
+                    String json = response.body();
+                    String jurl = "";
+                    try {
+                        JSONObject jsonObject = new JSONObject(json);
+                        if (jsonObject.has("url")) {
+                            jurl = jsonObject.optString("url");
+                        } else {
+                            // url属性不存在
+                            jurl = "";
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (jurl != null && !jurl.isEmpty()) {
+                        startPlayUrl(jurl, null);
+                        Toast.makeText(mContext, "净化成功!观影愉快", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });		
+	}
+
+	private boolean checkad(String url, List<String> list) {//检查是否带有广告标签
+        for (String tag : list) {
+            if (url.contains(tag)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     void startPlayUrl(String url, HashMap<String, String> headers) {
         final String finalUrl = url;
@@ -817,6 +853,14 @@ public class PlayActivity extends BaseActivity {
             @Override
             public void run() {
                 stopParse();
+				String adblockUrl = ApiConfig.get().adblockUrl;
+	            List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
+				if (!Hawk.get(HawkConfig.VIDEO_PURIFY, true) && checkad(url,adblockFlags) == true) {//接口去广告
+                    if (adblockUrl != null) {	    
+                        setTip("正在净化视频", true, false);
+		                adblock(adblockUrl,url);
+                    }
+                }
                 if (mVideoView != null) {
                     mVideoView.release();
                     if (finalUrl != null) {

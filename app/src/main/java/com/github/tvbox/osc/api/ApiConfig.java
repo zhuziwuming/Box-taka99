@@ -61,10 +61,11 @@ public class ApiConfig {
     private final List<LiveChannelGroup> liveChannelGroupList;
     private final List<ParseBean> parseBeanList;
     private List<String> vipParseFlags;
+	private List<String> adblockFlags;//用于返回去广告标签数组
     private List<IJKCode> ijkCodes;
     private String spider = null;
     public String wallpaper = "";
-
+    public String adblockUrl = "";//增加获取接口去广告
     private final SourceBean emptyHome = new SourceBean();
 
     private final JarLoader jarLoader = new JarLoader();
@@ -310,6 +311,10 @@ public class ApiConfig {
         // wallpaper
         wallpaper = DefaultConfig.safeJsonString(infoJson, "wallpaper", "");
         // 远端站点源
+		// 需要使用接口去广告的flag
+        adblockUrl = DefaultConfig.safeJsonString(infoJson, "adblock", ""); 
+         //去广告接口
+        adblockFlags = DefaultConfig.safeJsonStringList(infoJson, "blocklfags");
         SourceBean firstSite = null;
         for (JsonElement opt : infoJson.get("sites").getAsJsonArray()) {
             JsonObject obj = (JsonObject) opt;
@@ -730,6 +735,10 @@ public class ApiConfig {
 
     public List<String> getVipParseFlags() {
         return vipParseFlags;
+    }
+	
+	public List<String> getAdblockFlags() {//净化广告标签
+        return adblockFlags;
     }
 
     public SourceBean getHomeSourceBean() {
