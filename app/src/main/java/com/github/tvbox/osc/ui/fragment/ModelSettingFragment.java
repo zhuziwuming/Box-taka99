@@ -445,7 +445,8 @@ public class ModelSettingFragment extends BaseLazyFragment {
             @Override
             public void onClick(View v) {
                 FastClickCheckUtil.check(v);
-                int defaultPos = Hawk.get(HawkConfig.PLAY_TYPE, 0);
+				int playerType = Hawk.get(HawkConfig.PLAY_TYPE, 0);
+                int defaultPos = 1;
                 ArrayList<Integer> players = new ArrayList<>();
                 players.add(0);
                 players.add(1);
@@ -463,6 +464,13 @@ public class ModelSettingFragment extends BaseLazyFragment {
                 }
 				if (VlcPlayer.getPackageInfo() != null) {  
                     players.add(14);  
+                }
+				ArrayList<Integer> renders = new ArrayList<>();
+                for(int p = 0; p<players.size(); p++) {
+                    renders.add(p);
+                    if (players.get(p) == playerType) {
+                        defaultPos = p;
+                    }
                 }
                 SelectDialog<Integer> dialog = new SelectDialog<>(mActivity);
                 dialog.setTip(getString(R.string.dia_player));
