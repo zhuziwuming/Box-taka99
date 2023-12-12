@@ -412,7 +412,7 @@ public class SearchActivity extends BaseActivity {
         mGridView.setVisibility(View.INVISIBLE);
         searchAdapter.setNewData(new ArrayList<>());
         searchResult();
-		if(Hawk.get(HawkConfig.FAST_SEARCH_MODE, false)){
+		if(Hawk.get(HawkConfig.SEARCH_VIEW, 0)==1){
             Intent newIntent = new Intent(mContext, FastSearchActivity.class);
             newIntent.putExtra("title", etSearch.getText().toString().trim());
             newIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
