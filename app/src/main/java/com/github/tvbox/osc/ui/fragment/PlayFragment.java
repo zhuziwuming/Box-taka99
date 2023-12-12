@@ -852,7 +852,7 @@ public class PlayFragment extends BaseLazyFragment {
                 stopParse();
 				String adblockUrl = ApiConfig.get().adblockUrl;
 	            List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
-				if (!Hawk.get(HawkConfig.VIDEO_PURIFY, true) && checkad(url,adblockFlags) == true) {//接口去广告
+				if (!Hawk.get(HawkConfig.VIDEO_PURIFY, true) && checkad(url,adblockFlags)) {//接口去广告
                     if (adblockUrl != null) {	    
                         setTip("正在净化视频", true, false);
 		                adblock(adblockUrl,url);
