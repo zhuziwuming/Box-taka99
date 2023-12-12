@@ -852,8 +852,6 @@ public class PlayFragment extends BaseLazyFragment {
                 stopParse();
 				String adblockUrl = ApiConfig.get().adblockUrl;
 	            List<String> adblockFlags = ApiConfig.get().getAdblockFlags();
-				Toast.makeText(mContext, "接口开关：" + Hawk.get(HawkConfig.VIDEO_PURIFY, true), Toast.LENGTH_SHORT).show();
-				Toast.makeText(mContext, "是否有标签：" + checkad(url,adblockFlags), Toast.LENGTH_SHORT).show();
 				if (!Hawk.get(HawkConfig.VIDEO_PURIFY, true) && checkad(url,adblockFlags) == true) {//接口去广告
                     if (adblockUrl != null) {	    
                         setTip("正在净化视频", true, false);
