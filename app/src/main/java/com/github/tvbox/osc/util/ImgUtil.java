@@ -182,13 +182,13 @@ public class ImgUtil {
             if (!TextUtils.isEmpty(referer)) builder.addHeader(HttpHeaders.REFERER, referer);
         }
 
-        try {
-            URL imgUrl = new URL(url);
-            String host = imgUrl.getHost();
-            builder.addHeader(HttpHeaders.HOST, host);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
+        //try {
+            //URL imgUrl = new URL(url);
+            //String host = imgUrl.getHost();
+            //builder.addHeader(HttpHeaders.HOST, host);
+        //} catch (MalformedURLException e) {
+            //e.printStackTrace();
+        //}
 
         return new GlideUrl(url, builder.build());
     }
