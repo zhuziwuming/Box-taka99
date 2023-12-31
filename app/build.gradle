@@ -41,7 +41,7 @@ android {
     buildTypes {        
         release {
 		    signingConfig signingConfigs.config
-			outputFileName += '_' + new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00")+'.apk'
+			outputFileName += '_' + new Date().format("yyyyMMdd_HHmm", TimeZone.getTimeZone("GMT+08:00"))+'.apk'
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             minifyEnabled true
             ndk {
