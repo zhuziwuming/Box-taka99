@@ -274,12 +274,13 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                 @Override
                 public void onSuccess(Response<String> response) {
                     String netJson = response.body();
+					String newJson = tojson(netJson);
                     Hawk.put("home_hot_day", today);
-                    Hawk.put("home_hot", netJson);
+                    Hawk.put("home_hot", newJson);
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter.setNewData(loadHots(netJson));
+                            adapter.setNewData(loadHots(newJson));
                         }
                     });
                 }
@@ -292,6 +293,28 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         } catch (Throwable th) {
             th.printStackTrace();
         }
+    }
+	
+	private String tojson(jsonStr){
+        JsonObject infoJson = new Gson().fromJson(netJson, JsonObject.class);  
+        JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
+        JsonObject newObj = new JsonObject(); // 新建总对象  
+        JsonArray newArray = new JsonArray(); // 新建数组  
+          
+        for (JsonElement ele : array) {  
+            JsonObject movieObj = (JsonObject) ele; // 获取当前电影对象  
+            JsonObject newObj2 = new JsonObject(); // 为每部电影新建一个对象  
+            String title = movieObj.get("nm").getAsString();  
+            String cover = movieObj.get("img").getAsString();  
+            String rate = movieObj.get("sc").getAsString();  
+            newObj2.put("title", title);  
+            newObj2.put("cover", cover);  
+            newObj2.put("rate", rate);  
+            newArray.add(newObj2); // 将当前电影对象添加到数组中  
+        }  
+        newObj.put("code", 200);  
+        newObj.put("data", newArray);
+        return newObj.toString();
     }
 
     private ArrayList<Movie.Video> loadHots(String json) {
