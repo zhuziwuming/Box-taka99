@@ -268,20 +268,18 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     return;
                 }
             }
-            //String doubanHotURL = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
-			String doubanHotURL = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
+            String doubanHotURL = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
             String userAgent = UA.random();
             OkGo.<String>get(doubanHotURL).headers("User-Agent", userAgent).execute(new AbsCallback<String>() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     String netJson = response.body();
-					String newJson = tojson(netJson);
                     Hawk.put("home_hot_day", today);
-                    Hawk.put("home_hot", newJson);
+                    Hawk.put("home_hot", netJson);
                     mActivity.runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            adapter.setNewData(loadHots(newJson));
+                            adapter.setNewData(loadHots(netJson));
                         }
                     });
                 }
@@ -294,28 +292,6 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         } catch (Throwable th) {
             th.printStackTrace();
         }
-    }
-	
-	private String tojson(String jsonStr){
-        JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);  
-        JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
-        JsonObject newObj = new JsonObject(); // 新建总对象  
-        JsonArray newArray = new JsonArray(); // 新建数组  
-          
-        for (JsonElement ele : array) {  
-            JsonObject movieObj = (JsonObject) ele; // 获取当前电影对象  
-            JsonObject newObj2 = new JsonObject(); // 为每部电影新建一个对象  
-            String title = movieObj.get("nm").getAsString();  
-            String cover = movieObj.get("img").getAsString();  
-            String rate = movieObj.get("sc").getAsString();  
-            newObj2.addProperty("title", title);  
-            newObj2.addProperty("cover", cover);  
-            newObj2.addProperty("rate", rate);  
-            newArray.add(newObj2); // 将当前电影对象添加到数组中  
-        }  
-        newObj.addProperty("code", 200);  
-        newObj.add("data", newArray);
-        return newObj.toString();
     }
 
     private ArrayList<Movie.Video> loadHots(String json) {
