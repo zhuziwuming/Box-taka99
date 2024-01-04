@@ -268,7 +268,8 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
                     return;
                 }
             }
-            String doubanHotURL = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
+            //String doubanHotURL = "https://movie.douban.com/j/new_search_subjects?sort=U&range=0,10&tags=&playable=1&start=0&year_range=" + year + "," + year;
+			String doubanHotURL = "https://i.maoyan.com/ajax/moreClassicList?sortId=1&showType=3&limit=20";
             String userAgent = UA.random();
             OkGo.<String>get(doubanHotURL).headers("User-Agent", userAgent).execute(new AbsCallback<String>() {
                 @Override
