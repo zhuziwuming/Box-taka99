@@ -295,7 +295,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
         }
     }
 	
-	private String tojson(jsonStr){
+	private String tojson(String jsonStr){
         JsonObject infoJson = new Gson().fromJson(netJson, JsonObject.class);  
         JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
         JsonObject newObj = new JsonObject(); // 新建总对象  
