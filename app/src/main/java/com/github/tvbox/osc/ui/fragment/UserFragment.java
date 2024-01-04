@@ -308,12 +308,12 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             String title = movieObj.get("nm").getAsString();  
             String cover = movieObj.get("img").getAsString();  
             String rate = movieObj.get("sc").getAsString();  
-            newObj2.add("title", title);  
-            newObj2.add("cover", cover);  
-            newObj2.add("rate", rate);  
+            newObj2.addProperty("title", title);  
+            newObj2.addProperty("cover", cover);  
+            newObj2.addProperty("rate", rate);  
             newArray.add(newObj2); // 将当前电影对象添加到数组中  
         }  
-        newObj.add("code", 200);  
+        newObj.addProperty("code", 200);  
         newObj.add("data", newArray);
         return newObj.toString();
     }
