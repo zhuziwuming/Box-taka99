@@ -297,7 +297,7 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
     }
 	
 	private String tojson(String jsonStr){
-        JsonObject infoJson = new Gson().fromJson(netJson, JsonObject.class);  
+        JsonObject infoJson = new Gson().fromJson(jsonStr, JsonObject.class);  
         JsonArray array = infoJson.getAsJsonObject("classicMovies").getAsJsonArray("list");  
         JsonObject newObj = new JsonObject(); // 新建总对象  
         JsonArray newArray = new JsonArray(); // 新建数组  
@@ -308,13 +308,13 @@ public class UserFragment extends BaseLazyFragment implements View.OnClickListen
             String title = movieObj.get("nm").getAsString();  
             String cover = movieObj.get("img").getAsString();  
             String rate = movieObj.get("sc").getAsString();  
-            newObj2.put("title", title);  
-            newObj2.put("cover", cover);  
-            newObj2.put("rate", rate);  
+            newObj2.add("title", title);  
+            newObj2.add("cover", cover);  
+            newObj2.add("rate", rate);  
             newArray.add(newObj2); // 将当前电影对象添加到数组中  
         }  
-        newObj.put("code", 200);  
-        newObj.put("data", newArray);
+        newObj.add("code", 200);  
+        newObj.add("data", newArray);
         return newObj.toString();
     }
 
