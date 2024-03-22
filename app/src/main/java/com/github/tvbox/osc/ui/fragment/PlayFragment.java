@@ -1546,7 +1546,7 @@ public class PlayFragment extends BaseLazyFragment {
                             String wvUrl = DefaultConfig.checkReplaceProxy(rs.optString("url", ""));
                             loadUrl(wvUrl);
                         } else {
-                            playUrl(rs.optString("url", ""), headers);
+                            playUrl(rs.optString("url", ""), playHeaders);
                         }
                     }
                 }
@@ -1592,7 +1592,6 @@ public class PlayFragment extends BaseLazyFragment {
                                 }
                             });
                         } else {
-                            HashMap<String, String> headers = null;
                             if(playHeaders == null){
                                 if (rs.has("header")) {
                                     try {
@@ -1616,7 +1615,7 @@ public class PlayFragment extends BaseLazyFragment {
                                     }
                                 });
                             }
-                            playUrl(rs.optString("url", ""), headers);
+                            playUrl(rs.optString("url", ""), playHeaders);
                         }
                     }
                 }
