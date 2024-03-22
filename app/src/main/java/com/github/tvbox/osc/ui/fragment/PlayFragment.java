@@ -1067,7 +1067,7 @@ public class PlayFragment extends BaseLazyFragment {
                                     headers = new HashMap<>();
                                 }
                                 headers.put(key, hds.getString(key));
-                                if (key.equalsIgnoreCase("user-agent")) {
+                                if (key.equalsIgnoreCase("User-Agent")) {
                                     webUserAgent = hds.getString(key).trim();
                                 }
                             }
@@ -1419,7 +1419,7 @@ public class PlayFragment extends BaseLazyFragment {
                         Iterator<String> keys = headerJson.keys();
                         while (keys.hasNext()) {
                             String key = keys.next();
-                            if (key.equalsIgnoreCase("user-agent")) {
+                            if (key.equalsIgnoreCase("User-Agent")) {
                                 webUserAgent = headerJson.getString(key).trim();
                             } else {
                                 reqHeaders.put(key, headerJson.optString(key, ""));
@@ -1576,8 +1576,8 @@ public class PlayFragment extends BaseLazyFragment {
                         setTip("解析错误", false, true);
                     } else {
                         if (rs.has("parse") && rs.optInt("parse", 0) == 1) {
-                            if (rs.has("ua")) {
-                                webUserAgent = rs.optString("ua").trim();
+                            if (rs.has("User-Agent")) {
+                                webUserAgent = rs.optString("User-Agent").trim();
                             }
                             if (!isAdded()) return;
                             requireActivity().runOnUiThread(new Runnable() {
@@ -1977,7 +1977,7 @@ public class PlayFragment extends BaseLazyFragment {
             Map<String, String> hds = request.getRequestHeaders();
             if (hds != null && hds.keySet().size() > 0) {
                 for (String k : hds.keySet()) {
-                    if (k.equalsIgnoreCase("user-agent")
+                    if (k.equalsIgnoreCase("User-Agent")
                             || k.equalsIgnoreCase("referer")
                             || k.equalsIgnoreCase("origin")) {
                         webHeaders.put(k," " + hds.get(k));
@@ -2116,7 +2116,7 @@ public class PlayFragment extends BaseLazyFragment {
                     Map<String, String> hds = request.getRequestHeaders();
                     if (hds != null && hds.keySet().size() > 0) {
                         for (String k : hds.keySet()) {
-                            if (k.equalsIgnoreCase("user-agent")
+                            if (k.equalsIgnoreCase("User-Agent")
                                     || k.equalsIgnoreCase("referer")
                                     || k.equalsIgnoreCase("origin")) {
                                 webHeaders.put(k, " " + hds.get(k));
