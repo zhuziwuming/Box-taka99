@@ -139,6 +139,8 @@ public class PlayFragment extends BaseLazyFragment {
     private String videoURL;
     private long videoDuration = -1;
     private List<String> videoSegmentationURL = new ArrayList<>();
+	
+	private HashMap<String, String> playHeaders;
 
     @Override
     protected int getLayoutResID() {
@@ -1371,15 +1373,13 @@ public class PlayFragment extends BaseLazyFragment {
         if (!url.startsWith("http")) {
             return null;
         }
-        JSONObject headers = new JSONObject();
-        String ua = jsonPlayData.optString("user-agent", "");
-        if (ua.trim().length() > 0) {
-            headers.put("User-Agent", " " + ua);
-        }
-        String referer = jsonPlayData.optString("referer", "");
-        if (referer.trim().length() > 0) {
-            headers.put("Referer", " " + referer);
-        }
+		JSONObject headers = new JSONObject();
+		if(jsonPlayData.has("header")){
+            headers = jsonPlayData.getJSONObject("header");
+		}else{
+			headers = null;
+		}
+        
         JSONObject taskResult = new JSONObject();
         taskResult.put("header", headers);
         taskResult.put("url", url);
@@ -1436,20 +1436,24 @@ public class PlayFragment extends BaseLazyFragment {
         } else if (pb.getType() == 1) { // json 解析
             setTip("正在解析播放地址", true, false);
             // 解析ext
-            HttpHeaders reqHeaders = new HttpHeaders();
-            try {
-                JSONObject jsonObject = new JSONObject(pb.getExt());
-                if (jsonObject.has("header")) {
-                    JSONObject headerJson = jsonObject.optJSONObject("header");
-                    Iterator<String> keys = headerJson.keys();
-                    while (keys.hasNext()) {
-                        String key = keys.next();
-                        reqHeaders.put(key, headerJson.optString(key, ""));
-                    }
-                }
-            } catch (Throwable e) {
-                e.printStackTrace();
-            }
+            playHeaders = new HashMap<>();
+			if(pb.getExt()!=null){
+				// 解析ext
+				try {					
+					JSONObject jsonObject = new JSONObject(pb.getExt());
+					if (jsonObject.has("header")) {
+						JSONObject headerJson = jsonObject.optJSONObject("header");
+						Iterator<String> keys = headerJson.keys();
+						while (keys.hasNext()) {
+							String key = keys.next();
+							playHeaders.put(key, headerJson.optString(key, ""));			
+						}
+						
+					}
+				} catch (Throwable e) {
+					e.printStackTrace();
+				}
+			}
             OkGo.<String>get(pb.getUrl() + encodeUrl(webUrl))
                     .tag("json_jx")
                     .headers(reqHeaders)
@@ -1468,23 +1472,21 @@ public class PlayFragment extends BaseLazyFragment {
                             String json = response.body();
                             try {
                                 JSONObject rs = jsonParse(webUrl, json);
-                                HashMap<String, String> headers = null;
-                                if (rs.has("header")) {
-                                    try {
-                                        JSONObject hds = rs.getJSONObject("header");
-                                        Iterator<String> keys = hds.keys();
-                                        while (keys.hasNext()) {
-                                            String key = keys.next();
-                                            if (headers == null) {
-                                                headers = new HashMap<>();
+                                if(playHeaders == null){
+                                    if (rs.has("header")) {
+                                        try {
+                                            JSONObject hds = rs.getJSONObject("header");
+                                            Iterator<String> keys = hds.keys();
+                                            while (keys.hasNext()) {
+                                                String key = keys.next();
+                                                playHeaders.put(key, hds.getString(key));
                                             }
-                                            headers.put(key, hds.getString(key));
+                                        } catch (Throwable th) {
+					            
                                         }
-                                    } catch (Throwable th) {
-
                                     }
-                                }
-                                playUrl(rs.getString("url"), headers);
+					            }                                
+                                playUrl(rs.getString("url"), playHeaders);
                             } catch (Throwable e) {
                                 e.printStackTrace();
                                 errorWithRetry("解析错误", false);
@@ -1516,22 +1518,20 @@ public class PlayFragment extends BaseLazyFragment {
 //                        errorWithRetry("解析错误", false);
                         setTip("解析错误", false, true);
                     } else {
-                        HashMap<String, String> headers = null;
-                        if (rs.has("header")) {
-                            try {
-                                JSONObject hds = rs.getJSONObject("header");
-                                Iterator<String> keys = hds.keys();
-                                while (keys.hasNext()) {
-                                    String key = keys.next();
-                                    if (headers == null) {
-                                        headers = new HashMap<>();
+                        if(playHeaders == null){
+                            if (rs.has("header")) {
+                                try {
+                                    JSONObject hds = rs.getJSONObject("header");
+                                    Iterator<String> keys = hds.keys();
+                                    while (keys.hasNext()) {
+                                        String key = keys.next();
+                                        playHeaders.put(key, hds.getString(key));
                                     }
-                                    headers.put(key, hds.getString(key));
+                                } catch (Throwable th) {
+					    
                                 }
-                            } catch (Throwable th) {
-
                             }
-                        }
+					    }
                         if (rs.has("jxFrom")) {
                             if (!isAdded()) return;
                             requireActivity().runOnUiThread(new Runnable() {
@@ -1593,21 +1593,20 @@ public class PlayFragment extends BaseLazyFragment {
                             });
                         } else {
                             HashMap<String, String> headers = null;
-                            if (rs.has("header")) {
-                                try {
-                                    JSONObject hds = rs.getJSONObject("header");
-                                    Iterator<String> keys = hds.keys();
-                                    while (keys.hasNext()) {
-                                        String key = keys.next();
-                                        if (headers == null) {
-                                            headers = new HashMap<>();
+                            if(playHeaders == null){
+                                if (rs.has("header")) {
+                                    try {
+                                        JSONObject hds = rs.getJSONObject("header");
+                                        Iterator<String> keys = hds.keys();
+                                        while (keys.hasNext()) {
+                                            String key = keys.next();
+                                            playHeaders.put(key, hds.getString(key));
                                         }
-                                        headers.put(key, hds.getString(key));
+                                    } catch (Throwable th) {
+					        
                                     }
-                                } catch (Throwable th) {
-                                    th.printStackTrace();
                                 }
-                            }
+					        }
                             if (rs.has("jxFrom")) {
                                 if (!isAdded()) return;
                                 requireActivity().runOnUiThread(new Runnable() {
