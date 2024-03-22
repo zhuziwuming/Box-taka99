@@ -1405,6 +1405,8 @@ public class PlayFragment extends BaseLazyFragment {
     private void doParse(ParseBean pb) {
         stopParse();
         initParseLoadFound();
+		webHeaderMap = new HashMap<>(); // 初始化webHeaderMap  
+        webUserAgent = null; // 初始化  
         if (pb.getType() == 0) {
             setTip("正在嗅探播放地址", true, false);
             mHandler.removeMessages(100);
@@ -1419,9 +1421,9 @@ public class PlayFragment extends BaseLazyFragment {
                         Iterator<String> keys = headerJson.keys();
                         while (keys.hasNext()) {
                             String key = keys.next();
-                            if (key.equalsIgnoreCase("User-Agent")) {
+                            if (key.equalsIgnoreCase("ua")||key.equalsIgnoreCase("User-Agent")) {
                                 webUserAgent = headerJson.getString(key).trim();
-                            } else {
+							} else {
                                 reqHeaders.put(key, headerJson.optString(key, ""));
                             }
                         }
@@ -1576,9 +1578,11 @@ public class PlayFragment extends BaseLazyFragment {
                         setTip("解析错误", false, true);
                     } else {
                         if (rs.has("parse") && rs.optInt("parse", 0) == 1) {
-                            if (rs.has("User-Agent")) {
-                                webUserAgent = rs.optString("User-Agent").trim();
-                            }
+                            if (rs.has("ua")) {
+                                webUserAgent = rs.optString("ua").trim();
+                            }else if (rs.has("User-Agent")){
+								webUserAgent = rs.optString("User-Agent").trim();
+							}
                             if (!isAdded()) return;
                             requireActivity().runOnUiThread(new Runnable() {
                                 @Override
