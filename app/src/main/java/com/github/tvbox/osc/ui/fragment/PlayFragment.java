@@ -1456,7 +1456,7 @@ public class PlayFragment extends BaseLazyFragment {
 			}
             OkGo.<String>get(pb.getUrl() + encodeUrl(webUrl))
                     .tag("json_jx")
-                    .headers(reqHeaders)
+                    //.headers(reqHeaders)
                     .execute(new AbsCallback<String>() {
                         @Override
                         public String convertResponse(okhttp3.Response response) throws Throwable {
