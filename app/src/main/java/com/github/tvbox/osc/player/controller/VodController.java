@@ -341,7 +341,7 @@ public class VodController extends BaseController {
         // pause container
         mProgressTop = findViewById(R.id.tv_pause_container);
         mPauseIcon = findViewById(R.id.tv_pause_icon);
-		mp3ImageView = findViewById(R.id.mp3image);//音频背景
+		mp3ImageView = findViewById(R.id.mp3imageview);//音频背景
         mTapSeek = findViewById(R.id.ll_ddtap);
 
         // progress container
@@ -861,6 +861,17 @@ public class VodController extends BaseController {
                 }
             }
         });
+    }
+	
+	public void initLandscapePortraitBtnInfo() {
+        if (mControlWrapper != null) {
+            int width = mControlWrapper.getVideoSize()[0];
+            int height = mControlWrapper.getVideoSize()[1];
+            if (width < height) {
+                mLandscapePortraitBtn.setVisibility(View.VISIBLE);
+                mLvPortraitBtn.setImageResource(R.drawable.htov);
+            }
+        }
     }
 
     void initSubtitleInfo() {
