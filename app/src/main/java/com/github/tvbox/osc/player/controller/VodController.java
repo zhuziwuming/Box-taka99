@@ -49,6 +49,7 @@ import com.github.tvbox.osc.util.FastClickCheckUtil;
 import com.github.tvbox.osc.util.HawkConfig;
 import com.github.tvbox.osc.util.PlayerHelper;
 import com.github.tvbox.osc.util.SubtitleHelper;
+import com.github.tvbox.osc.util.ImgUtil;//音频图片显示
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
@@ -56,6 +57,8 @@ import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;//音频图片显示
 import org.greenrobot.eventbus.ThreadMode;//音频图片显示
+import android.text.TextUtils;//音频图片显示
+
 
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
