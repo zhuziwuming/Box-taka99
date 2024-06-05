@@ -52,7 +52,11 @@ import com.github.tvbox.osc.util.SubtitleHelper;
 import com.orhanobut.hawk.Hawk;
 import com.owen.tvrecyclerview.widget.TvRecyclerView;
 import com.owen.tvrecyclerview.widget.V7LinearLayoutManager;
+
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;//音频图片显示
+import org.greenrobot.eventbus.ThreadMode;//音频图片显示
+
 import org.jetbrains.annotations.NotNull;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -237,6 +241,7 @@ public class VodController extends BaseController {
     // pause container
     public static FrameLayout mProgressTop;
     ImageView mPauseIcon;
+	ImageView mp3ImageView;//音频图片背景
     LinearLayout mTapSeek;
 
     // progress container
@@ -320,6 +325,7 @@ public class VodController extends BaseController {
     @Override
     protected void initView() {
         super.initView();
+		EventBus.getDefault().register(this);//音频图片显示，注册广播开始
 
         // top container
         mTopHide = findViewById(R.id.top_container_hide);
@@ -332,6 +338,7 @@ public class VodController extends BaseController {
         // pause container
         mProgressTop = findViewById(R.id.tv_pause_container);
         mPauseIcon = findViewById(R.id.tv_pause_icon);
+		mp3ImageView = findViewById(R.id.mp3image);//音频背景
         mTapSeek = findViewById(R.id.ll_ddtap);
 
         // progress container
@@ -1081,8 +1088,19 @@ public class VodController extends BaseController {
                 listener.prepared();
                 // takagen99 : Add Video Resolution
                 if (mControlWrapper.getVideoSize().length >= 2) {
-                    mPlayerResolution.setText(mControlWrapper.getVideoSize()[0] + " x " + mControlWrapper.getVideoSize()[1]);
+					int width = mControlWrapper.getVideoSize()[0];
+                    int height = mControlWrapper.getVideoSize()[1];
+                    if (width == 0 || height == 0) {
+                        // 如果分辨率为0，显示图片
+                        mp3ImageView.setVisibility(View.VISIBLE);
+                    } else {
+                        // 如果有分辨率，隐藏图片
+                        mp3ImageView.setVisibility(View.GONE);
+                    }
+                    initLandscapePortraitBtnInfo();
+                    mPlayerResolution.setText(width + " x " + height);
                 }
+				break;
             case VideoView.STATE_BUFFERED:
                 break;
             case VideoView.STATE_PREPARING:
@@ -1254,6 +1272,20 @@ public class VodController extends BaseController {
         }
         return super.dispatchKeyEvent(event);
     }
+	
+	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    protected void onRefreshEvent(RefreshEvent event) {
+        if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
+            String vodPic = event.videoPicUrl;
+            if (!TextUtils.isEmpty(vodPic)) {
+                ImgUtil.load(vodPic, mp3ImageView, 14);
+            } else {
+                mp3ImageView.setImageResource(R.drawable.radio);
+            }
+
+        }
+    }
 
     @Override
     public boolean dispatchKeyEvent(KeyEvent event) {
@@ -1415,6 +1447,11 @@ public class VodController extends BaseController {
             anim.setDuration(600);
             anim.start();
         }
+    }
+	
+	// 注销当前音频图片的广播实例
+    protected void onDestroy() {
+        EventBus.getDefault().unregister(this);  
     }
 
     @Override
