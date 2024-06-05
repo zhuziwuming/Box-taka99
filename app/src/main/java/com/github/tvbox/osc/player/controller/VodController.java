@@ -862,17 +862,6 @@ public class VodController extends BaseController {
             }
         });
     }
-	
-	public void initLandscapePortraitBtnInfo() {
-        if (mControlWrapper != null) {
-            int width = mControlWrapper.getVideoSize()[0];
-            int height = mControlWrapper.getVideoSize()[1];
-            if (width < height) {
-                mLandscapePortraitBtn.setVisibility(View.VISIBLE);
-                mLvPortraitBtn.setImageResource(R.drawable.htov);
-            }
-        }
-    }
 
     void initSubtitleInfo() {
         int subtitleTextSize = SubtitleHelper.getTextSize(mActivity);
@@ -1111,7 +1100,7 @@ public class VodController extends BaseController {
                         // 如果有分辨率，隐藏图片
                         mp3ImageView.setVisibility(View.GONE);
                     }
-                    initLandscapePortraitBtnInfo();
+                    //initLandscapePortraitBtnInfo();
                     mPlayerResolution.setText(width + " x " + height);
                 }
 				break;
