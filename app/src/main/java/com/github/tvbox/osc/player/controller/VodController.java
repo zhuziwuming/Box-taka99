@@ -1278,8 +1278,8 @@ public class VodController extends BaseController {
 	
 	// 音频图片显示，使用 @Subscribe 注解，声明接收movie.pic事件的方法
     @Subscribe(threadMode = ThreadMode.MAIN)
-    protected void onRefreshEvent(RefreshEvent event) {
-        if (event.type == RefreshEvent.TYPE_YINPIN_EVENT) {
+    protected void onAudioEvent(AudioEvent event) {
+        if (event.type == AudioEvent.TYPE_YINPIN_EVENT) {
             String vodPic = event.videoPicUrl;
             if (!TextUtils.isEmpty(vodPic)) {
                 ImgUtil.load(vodPic, mp3ImageView, 14);

@@ -575,7 +575,7 @@ public class DetailActivity extends BaseActivity {
                     setTextShow(tvDirector, getString(R.string.det_dir), mVideo.director);
                     setTextShow(tvDes, getString(R.string.det_des), removeHtmlTag(mVideo.des));
                     if (!TextUtils.isEmpty(mVideo.pic)) {
-						EventBus.getDefault().post(new RefreshEvent(RefreshEvent.TYPE_YINPIN_EVENT, mVideo.pic));//音频图片显示
+						EventBus.getDefault().post(new AudioEvent(AudioEvent.TYPE_YINPIN_EVENT, mVideo.pic));//发送图片地址广播
                         // takagen99 : Use Glide instead : Rounding Radius is in pixel
                         ImgUtil.load(mVideo.pic, ivThumb, 14);
                     } else {
