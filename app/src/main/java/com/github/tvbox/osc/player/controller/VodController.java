@@ -35,6 +35,8 @@ import com.github.tvbox.osc.base.BaseActivity;
 import com.github.tvbox.osc.bean.IJKCode;
 import com.github.tvbox.osc.bean.ParseBean;
 import com.github.tvbox.osc.event.RefreshEvent;
+import com.github.tvbox.osc.event.AudioEvent;//音频背景监听
+
 import com.github.tvbox.osc.player.thirdparty.Kodi;
 import com.github.tvbox.osc.player.thirdparty.MXPlayer;
 import com.github.tvbox.osc.player.thirdparty.ReexPlayer;
