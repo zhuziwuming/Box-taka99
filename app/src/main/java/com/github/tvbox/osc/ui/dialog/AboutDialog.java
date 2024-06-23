@@ -15,6 +15,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 public class AboutDialog extends BaseDialog {
+	
+	private String versionName;
 
     public AboutDialog(@NonNull @NotNull Context context) {
         super(context);
