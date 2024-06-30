@@ -500,7 +500,7 @@ public class SearchActivity extends BaseActivity {
             if (searchAdapter.getData().size() <= 0) {
                 showEmpty();
             }
-            cancel();
+            //cancel();
         }
     }
 
