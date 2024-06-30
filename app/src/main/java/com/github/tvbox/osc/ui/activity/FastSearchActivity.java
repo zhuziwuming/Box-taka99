@@ -479,7 +479,7 @@ public class FastSearchActivity extends BaseActivity {
             if (searchAdapter.getData().size() <= 0) {
                 showEmpty();
             }
-            cancel();
+            //cancel();
         }
     }
 
